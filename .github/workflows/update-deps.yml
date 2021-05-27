@@ -51,6 +51,7 @@ jobs:
             exit 1
           fi
           BRANCH_TARGET=$(echo '${{ env.CONFIG }}' | jq -r ".targetBranch")
+          echo "$BRANCH_TARGET"
           if [[ -z "$BRANCH_TARGET" || "$BRANCH_TARGET" == "null" ]]; then
             # Since 'Fetch changes' step fetches default branch, we just get branch name (which will be default one).
             BRANCH_TARGET=$(git rev-parse --abbrev-ref HEAD)
