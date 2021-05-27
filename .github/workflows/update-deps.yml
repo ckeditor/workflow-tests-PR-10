@@ -63,6 +63,13 @@ jobs:
           if [[ $(git ls-remote --heads | grep deps-update_${{ env.BRANCH_TARGET }}_${{ matrix.deps }} | wc -c) -ne 0 ]]; then
             echo "BRANCH_UPDATE=0" >> $GITHUB_ENV
           fi
+          NPM_UPDATE_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmUpdateDate")
+          NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
+          DAY=$(date +"%d")
+
+          echo "$DAY"
+          echo "$NPM_UPDATE_DATE"
+          echo "$NPM_CHECK_DATE"
 
       - name: Update NPM dependencies
         if: env.BRANCH_UPDATE != 0
