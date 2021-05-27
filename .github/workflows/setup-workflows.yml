@@ -36,7 +36,7 @@ jobs:
         run: |
           AS_PR=$(echo '${{ env.CONFIG }}' | jq -r ".pushAsPullRequest")
           echo "$AS_PR"
-          AS_PR2=$(echo '${{ env.CONFIG }}' | jq -r "setupWorkflows.pushAsPullRequest")
+          AS_PR2=$(echo '${{ env.CONFIG }}' | jq -r ".setupWorkflows.pushAsPullRequest")
           echo "$AS_PR2"
           if [[ "$AS_PR" == "true" ]]; then
             echo "AS_PR=1" >> $GITHUB_ENV
