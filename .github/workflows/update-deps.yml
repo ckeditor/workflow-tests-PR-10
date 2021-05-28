@@ -63,42 +63,15 @@ jobs:
           if [[ $(git ls-remote --heads | grep deps-update_${{ env.BRANCH_TARGET }}_${{ matrix.deps }} | wc -c) -ne 0 ]]; then
             echo "BRANCH_UPDATE=0" >> $GITHUB_ENV
           fi
-          NPM_UPDATE_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmUpdateDate")
-          NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
-          DAY=$(date +"%d")
-
-          echo "$DAY"
-          echo "$NPM_UPDATE_DATE"
-          echo "$NPM_CHECK_DATE"
 
       - name: Update NPM dependencies
         if: env.BRANCH_UPDATE != 0
         run: |
-          if [[ ! -f "./package.json" ]]; then
-            echo "'package.json' file not found, with nothing to update the workflow ends here."
-            exit 0
-          fi
+          npm i
+          npm install -g npm-check
+          git checkout -b ${{ env.BRANCH_UPDATE }}
+          npm-check -y --${{ matrix.deps }}
 
-          NPM_UPDATE_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmUpdateDate")
-          NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
-          DAY=$(date +"%d")
-
-          echo "$DAY"
-          echo "$NPM_UPDATE_DATE"
-          echo "$NPM_CHECK_DATE"
-
-          # if [[ "$NPM_UPDATE_DATE" == "null" ]]; then
-
-          # fi
-          # if [[ "$DAY" == "$NPM_UPDATE_DATE" ]]; then
-          #   echo "update!"
-          # elif [[ "$DAY" == "$NPM_CHECK_DATE" ]]; then
-          #   echo "check!"
-          #   npm i
-          #   npm install -g npm-check
-          #   git checkout -b ${{ env.BRANCH_UPDATE }}
-          #   npm-check -y --${{ matrix.deps }}
-          # fi
       - name: Add changes
         if: env.BRANCH_UPDATE != 0
         run: |
