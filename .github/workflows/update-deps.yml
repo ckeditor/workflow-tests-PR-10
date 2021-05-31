@@ -78,7 +78,7 @@ jobs:
           TEST = "aaa"
           echo "$TEST"
 
-          echo "BRANCH_UPDATE=deps-${{ DEPS_BUMP_METHOD }}_${{ env.BRANCH_TARGET }}_${{ matrix.deps }}" >> $GITHUB_ENV
+          echo "BRANCH_UPDATE=deps-_${{ env.BRANCH_TARGET }}_${{ matrix.deps }}" >> $GITHUB_ENV
           if [[ $(git ls-remote --heads | grep deps-update_${{ env.BRANCH_TARGET }}_${{ matrix.deps }} | wc -c) -ne 0 ]]; then
             echo "BRANCH_UPDATE=0" >> $GITHUB_ENV
           fi
