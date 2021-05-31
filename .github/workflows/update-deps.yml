@@ -61,9 +61,9 @@ jobs:
           NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
 
           if [[ "$DAY" == "$NPM_CHECK_DATE" ]]; then
-            echo "DEPS_BUMP_METHOD=npm_update" >> $GITHUB_ENV
-          else
             echo "DEPS_BUMP_METHOD=npm-check" >> $GITHUB_ENV
+          else
+            echo "DEPS_BUMP_METHOD=npm_update" >> $GITHUB_ENV
           fi
 
       - name: Check if update branch already exists
@@ -84,7 +84,7 @@ jobs:
           DAY=$(date +"%d")
           NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
 
-          if [[ ! "${{ env.DEPS_BUMP_METHOD }}" == "npm_update" ]]; then
+          if [[ "${{ env.DEPS_BUMP_METHOD }}" == "npm_update" ]]; then
             echo "Just npm update today!"
             git checkout -b ${{ env.BRANCH_UPDATE }}
             npm update
