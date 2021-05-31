@@ -75,7 +75,7 @@ jobs:
           #   DEPS_BUMP_METHOD="npm-check"
           # fi
 
-          TEST = "aaa"
+          TEST="aaa"
           echo "$TEST"
 
           echo "BRANCH_UPDATE=deps-_${{ env.BRANCH_TARGET }}_${{ matrix.deps }}" >> $GITHUB_ENV
