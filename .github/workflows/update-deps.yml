@@ -55,6 +55,10 @@ jobs:
             # Since 'Fetch changes' step fetches default branch, we just get branch name (which will be default one).
             BRANCH_TARGET=$(git rev-parse --abbrev-ref HEAD)
           fi
+
+          DAY=$(date +"%d")
+          NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
+          echo "SEMVER_UPDATE=($DAY==$NPM_CHECK_DATE)" >> $GITHUB_ENV
           echo "BRANCH_TARGET=$BRANCH_TARGET" >> $GITHUB_ENV
 
       - name: Check if update branch already exists
@@ -67,10 +71,25 @@ jobs:
       - name: Update NPM dependencies
         if: env.BRANCH_UPDATE != 0
         run: |
-          npm i
-          npm install -g npm-check
-          git checkout -b ${{ env.BRANCH_UPDATE }}
-          npm-check -y --${{ matrix.deps }}
+          if [[ ! -f "./package.json" ]]; then
+            echo "'package.json' file not found, with nothing to update the workflow ends here."
+            exit 0
+          fi
+
+          DAY=$(date +"%d")
+          NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
+
+          if [[ ! "$DAY" == "$NPM_CHECK_DATE" ]]; then
+            echo "Just npm update today!"
+            git checkout -b ${{ env.BRANCH_UPDATE }}
+            npm update
+          else
+            echo "Running npm-check!"
+            npm i
+            npm install -g npm-check
+            git checkout -b ${{ env.BRANCH_UPDATE }}
+            npm-check -y --${{ matrix.deps }}
+          fi
 
       - name: Add changes
         if: env.BRANCH_UPDATE != 0
