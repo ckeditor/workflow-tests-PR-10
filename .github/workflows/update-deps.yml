@@ -58,16 +58,19 @@ jobs:
 
           DAY=$(date +"%d")
           NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
-          echo "SEMVER_UPDATE=($DAY==$NPM_CHECK_DATE)" >> $GITHUB_ENV
-          echo "SEMVER_UPDATE2=$($DAY==$NPM_CHECK_DATE)" >> $GITHUB_ENV
-          echo "SEMVER_UPDATE3=$DAY==$NPM_CHECK_DATE" >> $GITHUB_ENV
-          echo "SEMVER_UPDATE4='$DAY==$NPM_CHECK_DATE'" >> $GITHUB_ENV
-          echo "SEMVER_UPDATE5=$[[$DAY==$NPM_CHECK_DATE]]" >> $GITHUB_ENV
-          echo "SEMVER_UPDATE6=$(($DAY==$NPM_CHECK_DATE))" >> $GITHUB_ENV
+          # echo "SEMVER_UPDATE=($DAY==$NPM_CHECK_DATE)" >> $GITHUB_ENV
+          # echo "SEMVER_UPDATE2=$($DAY==$NPM_CHECK_DATE)" >> $GITHUB_ENV
+          # echo "SEMVER_UPDATE3=$DAY==$NPM_CHECK_DATE" >> $GITHUB_ENV
+          # echo "SEMVER_UPDATE4='$DAY==$NPM_CHECK_DATE'" >> $GITHUB_ENV
+          # echo "SEMVER_UPDATE5=$[[$DAY==$NPM_CHECK_DATE]]" >> $GITHUB_ENV
+          echo "SEMVER_UPDATE=$(($DAY==$NPM_CHECK_DATE))" >> $GITHUB_ENV
           echo "BRANCH_TARGET=$BRANCH_TARGET" >> $GITHUB_ENV
 
       - name: Check if update branch already exists
         run: |
+          if [[ "${{ env.SEMVER_UPDATE }}" ]]; then
+            echo "yes"
+          fi
           echo "BRANCH_UPDATE=deps-update_${{ env.BRANCH_TARGET }}_${{ matrix.deps }}" >> $GITHUB_ENV
           if [[ $(git ls-remote --heads | grep deps-update_${{ env.BRANCH_TARGET }}_${{ matrix.deps }} | wc -c) -ne 0 ]]; then
             echo "BRANCH_UPDATE=0" >> $GITHUB_ENV
