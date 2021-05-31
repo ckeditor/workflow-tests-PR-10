@@ -55,44 +55,19 @@ jobs:
             # Since 'Fetch changes' step fetches default branch, we just get branch name (which will be default one).
             BRANCH_TARGET=$(git rev-parse --abbrev-ref HEAD)
           fi
+          echo "BRANCH_TARGET=$BRANCH_TARGET" >> $GITHUB_ENV
 
           DAY=$(date +"%d")
           NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
-          # echo "SEMVER_UPDATE=($DAY==$NPM_CHECK_DATE)" >> $GITHUB_ENV
-          # echo "SEMVER_UPDATE2=$($DAY==$NPM_CHECK_DATE)" >> $GITHUB_ENV
-          # echo "SEMVER_UPDATE3=$DAY==$NPM_CHECK_DATE" >> $GITHUB_ENV
-          # echo "SEMVER_UPDATE4='$DAY==$NPM_CHECK_DATE'" >> $GITHUB_ENV
-          # echo "SEMVER_UPDATE5=$[[$DAY==$NPM_CHECK_DATE]]" >> $GITHUB_ENV
-          echo "hello1"
-          # echo "SEMVER_UPDATE=$(($DAY==$NPM_CHECK_DATE))" >> $GITHUB_ENV
-          echo "BRANCH_TARGET=$BRANCH_TARGET" >> $GITHUB_ENV
+
           if [[ "$DAY" == "$NPM_CHECK_DATE" ]]; then
             echo "DEPS_BUMP_METHOD=npm_update" >> $GITHUB_ENV
-            echo "DEPS_BUMP_METHOD2=((npm_update))" >> $GITHUB_ENV
-            echo "DEPS_BUMP_METHOD3=(('npm_update'))" >> $GITHUB_ENV
           else
-            echo "DEPS_BUMP_METHOD='npm_check'" >> $GITHUB_ENV
+            echo "DEPS_BUMP_METHOD=npm-check" >> $GITHUB_ENV
           fi
-          echo hello2
 
       - name: Check if update branch already exists
         run: |
-          # DEPS_BUMP_METHOD=$("npm_update")
-          # if [[ "${{ env.SEMVER_UPDATE }}" == "1" ]]; then
-          #   echo "DEPS_BUMP_METHOD='npm_update'" >> $GITHUB_ENV
-          #   echo "DEPS_BUMP_METHOD2=((npm_update))" >> $GITHUB_ENV
-          #   echo "DEPS_BUMP_METHOD3=(('npm_update'))" >> $GITHUB_ENV
-          # else
-          #   echo "DEPS_BUMP_METHOD='npm_check'" >> $GITHUB_ENV
-          # fi
-
-          variable=$(( 1 == 1 ? "hello" : 0 ))
-          echo "$variable"
-          echo $variable
-          # TEST="aaa"
-          # echo "$TEST"
-          echo env
-
           echo "BRANCH_UPDATE=deps-${{ env.DEPS_BUMP_METHOD}}_${{ env.BRANCH_TARGET }}_${{ matrix.deps }}" >> $GITHUB_ENV
           if [[ $(git ls-remote --heads | grep deps-update_${{ env.BRANCH_TARGET }}_${{ matrix.deps }} | wc -c) -ne 0 ]]; then
             echo "BRANCH_UPDATE=0" >> $GITHUB_ENV
@@ -109,7 +84,7 @@ jobs:
           DAY=$(date +"%d")
           NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
 
-          if [[ ! "$DAY" == "$NPM_CHECK_DATE" ]]; then
+          if [[ ! "${{ env.DEPS_BUMP_METHOD }}" == "npm_update" ]]; then
             echo "Just npm update today!"
             git checkout -b ${{ env.BRANCH_UPDATE }}
             npm update
