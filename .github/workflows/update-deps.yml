@@ -65,7 +65,7 @@ jobs:
           # echo "SEMVER_UPDATE5=$[[$DAY==$NPM_CHECK_DATE]]" >> $GITHUB_ENV
           echo "SEMVER_UPDATE=$(($DAY==$NPM_CHECK_DATE))" >> $GITHUB_ENV
           echo "BRANCH_TARGET=$BRANCH_TARGET" >> $GITHUB_ENV
-          if [[ "$SEMVER_UPDATE" == "1" ]]; then
+          if [[ "$DAY" == "NPM_CHECK_DATE" ]]; then
             echo "hello"
           fi
 
