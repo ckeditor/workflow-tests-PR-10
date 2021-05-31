@@ -76,7 +76,7 @@ jobs:
           DAY=$(date +"%d")
 
           if [[ ! "$DAY" == "$NPM_CHECK_DATE" ]]; then
-            echo "Just `npm update` today!"
+            echo "Just npm update today!"
             npm update
           else
             echo "Running npm-check!"
