@@ -77,6 +77,7 @@ jobs:
 
           if [[ ! "$DAY" == "$NPM_CHECK_DATE" ]]; then
             echo "Just npm update today!"
+            git checkout -b ${{ env.BRANCH_UPDATE }}
             npm update
           else
             echo "Running npm-check!"
