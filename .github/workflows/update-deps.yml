@@ -68,6 +68,7 @@ jobs:
 
       - name: Check if update branch already exists
         run: |
+          DEPS_BUMP_METHOD = ""
           if [[ "${{ env.SEMVER_UPDATE }}" == "1" ]]; then
             DEPS_BUMP_METHOD = "npm_update"
           else
