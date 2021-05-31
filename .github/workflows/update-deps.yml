@@ -69,11 +69,11 @@ jobs:
       - name: Check if update branch already exists
         run: |
           DEPS_BUMP_METHOD=$("npm_update")
-          if [[ "${{ env.SEMVER_UPDATE }}" == "1" ]]; then
-            DEPS_BUMP_METHOD="npm_update"
-          else
-            DEPS_BUMP_METHOD="npm-check"
-          fi
+          # if [[ "${{ env.SEMVER_UPDATE }}" == "1" ]]; then
+          #   DEPS_BUMP_METHOD="npm_update"
+          # else
+          #   DEPS_BUMP_METHOD="npm-check"
+          # fi
 
           echo "BRANCH_UPDATE=deps-${{ DEPS_BUMP_METHOD }}_${{ env.BRANCH_TARGET }}_${{ matrix.deps }}" >> $GITHUB_ENV
           if [[ $(git ls-remote --heads | grep deps-update_${{ env.BRANCH_TARGET }}_${{ matrix.deps }} | wc -c) -ne 0 ]]; then
