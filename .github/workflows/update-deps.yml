@@ -67,7 +67,7 @@ jobs:
           # echo "SEMVER_UPDATE=$(($DAY==$NPM_CHECK_DATE))" >> $GITHUB_ENV
           echo "BRANCH_TARGET=$BRANCH_TARGET" >> $GITHUB_ENV
           if [[ "$DAY" == "$NPM_CHECK_DATE" ]]; then
-            echo "DEPS_BUMP_METHOD='npm_update'" >> $GITHUB_ENV
+            echo "DEPS_BUMP_METHOD=npm_update" >> $GITHUB_ENV
             echo "DEPS_BUMP_METHOD2=((npm_update))" >> $GITHUB_ENV
             echo "DEPS_BUMP_METHOD3=(('npm_update'))" >> $GITHUB_ENV
           else
