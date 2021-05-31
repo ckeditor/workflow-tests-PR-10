@@ -68,7 +68,7 @@ jobs:
 
       - name: Check if update branch already exists
         run: |
-          if [[ "${{ env.SEMVER_UPDATE }}" ]]; then
+          if [[ "${{ env.SEMVER_UPDATE }}" == "1" ]]; then
             echo "yes"
           fi
           echo "BRANCH_UPDATE=deps-update_${{ env.BRANCH_TARGET }}_${{ matrix.deps }}" >> $GITHUB_ENV
