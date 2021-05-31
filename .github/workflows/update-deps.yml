@@ -90,6 +90,8 @@ jobs:
       - name: Add changes
         if: env.BRANCH_UPDATE != 0
         run: |
+          echo (git diff origin/${{ env.BRANCH_TARGET }} | wc -c)
+          echo (git diff origin/${{ env.BRANCH_TARGET }} | wc -c) -ne 0
           if [[ $(git diff origin/${{ env.BRANCH_TARGET }} | wc -c) -ne 0 ]]; then
             git config --local user.email "${{ secrets.GH_BOT_EMAIL }}"
             git config --local user.name "${{ secrets.GH_BOT_USERNAME }}"
