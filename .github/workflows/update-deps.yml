@@ -75,7 +75,7 @@ jobs:
             echo "DEPS_BUMP_METHOD='npm_check'" >> $GITHUB_ENV
           fi
 
-          variable=$(( 1 == 1 ? 'hello' : 0 ))
+          variable=$(( 1 == 1 ? "hello" : 0 ))
           echo "$variable"
           echo $variable
           # TEST="aaa"
