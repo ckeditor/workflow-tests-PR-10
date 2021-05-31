@@ -62,6 +62,8 @@ jobs:
           echo "SEMVER_UPDATE2=$($DAY==$NPM_CHECK_DATE)" >> $GITHUB_ENV
           echo "SEMVER_UPDATE3=$DAY==$NPM_CHECK_DATE" >> $GITHUB_ENV
           echo "SEMVER_UPDATE4='$DAY==$NPM_CHECK_DATE'" >> $GITHUB_ENV
+          echo "SEMVER_UPDATE5=$[[$DAY==$NPM_CHECK_DATE]]" >> $GITHUB_ENV
+          echo "SEMVER_UPDATE6=$(($DAY==$NPM_CHECK_DATE))" >> $GITHUB_ENV
           echo "BRANCH_TARGET=$BRANCH_TARGET" >> $GITHUB_ENV
 
       - name: Check if update branch already exists
