@@ -64,13 +64,48 @@ jobs:
             echo "BRANCH_UPDATE=0" >> $GITHUB_ENV
           fi
 
+
+          NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
+          DAY=$(date +"%d")
+
+          echo "$NPM_CHECK_DATE"
+          echo "$DAY"
+
+          if [[ ! "$DAY" == "$NPM_CHECK_DATE" ]]; then
+            echo "update!"
+            # npm update
+          else
+            echo "check!"
+            # npm i
+            # npm install -g npm-check
+            # git checkout -b ${{ env.BRANCH_UPDATE }}
+            # npm-check -y --${{ matrix.deps }}
+          fi
+
       - name: Update NPM dependencies
         if: env.BRANCH_UPDATE != 0
         run: |
-          npm i
-          npm install -g npm-check
-          git checkout -b ${{ env.BRANCH_UPDATE }}
-          npm-check -y --${{ matrix.deps }}
+          if [[ ! -f "./package.json" ]]; then
+            echo "'package.json' file not found, with nothing to update the workflow ends here."
+            exit 0
+          fi
+
+          NPM_CHECK_DATE=$(echo '${{ env.CONFIG }}' | jq -r ".npmCheckDate")
+          DAY=$(date +"%d")
+
+          echo "$NPM_CHECK_DATE"
+          echo "$DAY"
+
+          if [[ ! "$DAY" == "$NPM_CHECK_DATE" ]]; then
+            echo "update!"
+            npm update
+          else
+            echo "check!"
+            npm i
+            npm install -g npm-check
+            git checkout -b ${{ env.BRANCH_UPDATE }}
+            npm-check -y --${{ matrix.deps }}
+          fi
 
       - name: Add changes
         if: env.BRANCH_UPDATE != 0
