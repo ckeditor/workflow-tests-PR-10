@@ -64,21 +64,27 @@ jobs:
           # echo "SEMVER_UPDATE4='$DAY==$NPM_CHECK_DATE'" >> $GITHUB_ENV
           # echo "SEMVER_UPDATE5=$[[$DAY==$NPM_CHECK_DATE]]" >> $GITHUB_ENV
           echo "hello1"
-          echo "SEMVER_UPDATE=$(($DAY==$NPM_CHECK_DATE))" >> $GITHUB_ENV
+          # echo "SEMVER_UPDATE=$(($DAY==$NPM_CHECK_DATE))" >> $GITHUB_ENV
           echo "BRANCH_TARGET=$BRANCH_TARGET" >> $GITHUB_ENV
           if [[ "$DAY" == "$NPM_CHECK_DATE" ]]; then
-            echo "hello"
+            echo "DEPS_BUMP_METHOD='npm_update'" >> $GITHUB_ENV
+            echo "DEPS_BUMP_METHOD2=((npm_update))" >> $GITHUB_ENV
+            echo "DEPS_BUMP_METHOD3=(('npm_update'))" >> $GITHUB_ENV
+          else
+            echo "DEPS_BUMP_METHOD='npm_check'" >> $GITHUB_ENV
           fi
           echo hello2
 
       - name: Check if update branch already exists
         run: |
           # DEPS_BUMP_METHOD=$("npm_update")
-          if [[ "${{ env.SEMVER_UPDATE }}" == "1" ]]; then
-            echo "DEPS_BUMP_METHOD='npm_update'" >> $GITHUB_ENV
-          else
-            echo "DEPS_BUMP_METHOD='npm_check'" >> $GITHUB_ENV
-          fi
+          # if [[ "${{ env.SEMVER_UPDATE }}" == "1" ]]; then
+          #   echo "DEPS_BUMP_METHOD='npm_update'" >> $GITHUB_ENV
+          #   echo "DEPS_BUMP_METHOD2=((npm_update))" >> $GITHUB_ENV
+          #   echo "DEPS_BUMP_METHOD3=(('npm_update'))" >> $GITHUB_ENV
+          # else
+          #   echo "DEPS_BUMP_METHOD='npm_check'" >> $GITHUB_ENV
+          # fi
 
           variable=$(( 1 == 1 ? "hello" : 0 ))
           echo "$variable"
